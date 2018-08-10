@@ -1,0 +1,231 @@
+<mujoco model="ur5">
+    <compiler angle="radian" meshdir="meshes/YCB" coordinate="local" />
+
+    <option gravity="0 0 -9.81" cone="elliptic" timestep="0.02" />
+
+    <size njmax="500" nconmax="100" />
+
+    <visual>
+        <map znear="0.001" />
+    </visual>
+
+    <default>
+        <light castshadow="false" diffuse="1 1 1" />
+        <joint frictionloss="1" damping="1" />
+        <camera fovy="60" />
+        <motor gear="0.8"/>
+        <velocity kv="10"/>
+        <position kp="5"/>
+
+        <default class="object1">
+            <geom type="capsule" material="object1" size="0.03 0.015"/>
+        </default>
+
+        <default class="object2">
+            <geom type="ellipsoid" material="object2" size="0.045 0.03 0.021"/>
+        </default>
+
+        <default class="object3">
+            <geom type="box" material="object3" size="0.45 0.3 0.15"/>
+        </default>
+
+        <default class="object4">
+            <geom type="cylinder" material="object4" size="0.03 0.015" condim="4" friction="1 .01 .01"/>
+        </default>
+
+        <default class="object5">
+            <geom type="sphere" material="object5" size="0.03"/>
+        </default>
+
+    </default>
+
+    <asset>
+        <!-- <mesh name="hole" file="hole.stl" scale="0.002 0.002 0.002" />  -->
+        <!-- size: (40mm) 0.08 0.08 (9.47mm)-->
+        <!-- <mesh name="peg" file="peg.stl" scale="0.002 0.002 0.002" />  -->
+        <!-- size: 7.75mm 40mm -->
+        
+        <!-- mesh of YCB ojbect -->
+        <mesh name="1" file="chefcan.stl" />
+        <mesh name="2" file="crackerbox.stl" />
+        <mesh name="3" file="fishcan.stl" />
+        <mesh name="4" file="gelatinbox.stl" />
+        <mesh name="5" file="puddingbox.stl" />
+        <mesh name="6" file="meatcan.stl" />
+        <mesh name="7" file="mustardbottle.stl" />
+
+        <material name="RobMat" specular="0.9" shininess="0.5" reflectance="0" rgba="0.7 0.7 0.7 1" emission="0.1" />
+        <material name="GriMat" specular="0.9" shininess="0.5" reflectance="0" rgba="0.1 0.1 0.1 1" emission="0.1" />
+        <material name="BasketMat" specular="0" shininess="0" reflectance="0" rgba="0.26 0.16 0.16796875 1" emission="0" />
+        <material name="Light" specular="0" shininess="0.6" reflectance="0.9" rgba="0.5 0.5 1 1" emission="0.7" />
+        <texture name="texgeom" type="cube" builtin="flat" mark="cross" width="128" height="128" 
+            rgb1="0.6 0.6 0.6" rgb2="0.6 0.6 0.6" markrgb="1 1 1"/>  
+
+        <material name='object1' texture="texgeom" texuniform="true" rgba=".4 .9 .6 1" />
+        <material name='object2' texture="texgeom" texuniform="true" rgba=".4 .6 .9 1" />
+        <material name='object3' texture="texgeom" texuniform="true" rgba=".4 .9 .9 1" />
+        <material name='object4' texture="texgeom" texuniform="true" rgba=".8 .6 .8 1" />
+        <material name='object5' texture="texgeom" texuniform="true" rgba=".9 .1 .1 1" />
+    </asset>
+
+    <worldbody>
+        <!-- <body pos="-0.16 0.90 0.02" euler="4.71238898 0 3.14159265">
+            <body euler="0 -0.82 0">
+                <joint name="camera_joint" pos="0 0 0" axis="1 0 0" type="slide"/>
+                <camera name="sphere_camera" euler="0.25 0 0" fovy="43" />
+            </body>
+        </body> -->
+
+        <!-- <body name="cameramover" mocap="true" pos="-0.6 0.6 0" >
+            <camera name="mycamera" fovy="43" pos="0 0 0"/>
+            <site name="site" pos="0 0 0" size="0.05 0.05 0.05" type="box" rgba=".8 .6 .8 1" />
+        </body>  -->
+       
+        <body name="cameramover" pos="-0.6 0.6 0" quat="0.707 0 0 0.707">
+            <inertial pos="0 0 0" quat="1 0 0 0" mass="0.1" diaginertia="0.1 0.1 0.1"/>
+            
+            <joint name="camera_joint1" type="slide" axis="1 0 0" pos="0 0 0"/>
+            <joint name="camera_joint2" type="slide" axis="0 1 0" pos="0 0 0"/>
+            <joint name="camera_joint3" type="slide" axis="0 0 1" pos="0 0 0"/>
+            <body>
+                <inertial pos="0 0 0" quat="1 0 0 0" mass="0.1" diaginertia="0.1 0.1 0.1"/>
+                <joint name="camera_joint6" type="hinge" axis="0 0 1" pos="0 0 0"/>    
+                <joint name="camera_joint4" type="hinge" axis="1 0 0" pos="0 0 0"/>
+                <joint name="camera_joint5" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                
+                <camera name="mycamera" fovy="45" ipd="0.068" pos="0 0 0" quat="0.707 0 0 0.707" />
+                <site name="site" pos="0 0 0" size="0.02 0.02 0.05" type="box" rgba=".8 .6 .8 1" />
+            </body>        
+        </body> 
+
+        <!-- <body name="cameramover" pos="-0.6 0.6 0" >
+            <inertial pos="0 0 0" quat="1 0 0 0" mass="0.1" diaginertia="0.1 0.1 0.1"/>
+            <joint name="camera_joint1" type="slide" axis="1 0 0" pos="0 0 0"/>
+            <joint name="camera_joint2" type="slide" axis="0 1 0" pos="0 0 0"/>
+            <joint name="camera_joint3" type="slide" axis="0 0 1" pos="0 0 0"/>
+            <joint name="camera_joint4" type="hinge" axis="1 0 0" pos="0 0 0"/>
+            <joint name="camera_joint5" type="hinge" axis="0 1 0" pos="0 0 0"/>
+            <joint name="camera_joint6" type="hinge" axis="0 0 1" pos="0 0 0"/>
+            <camera name="mycamera" fovy="43" pos="0 0 0" />
+            <site name="site" pos="0 0 0" size="0.02 0.02 0.05" type="box" rgba=".8 .6 .8 1" />
+        </body>  -->
+
+        <light directional="true" pos="-0.5 0.5 3" dir="0 0 -1" />
+        <light directional="false" pos="-0.5 0.5 1.5" dir="0 -1 0" />
+        
+
+        <geom name="workbench_down" pos="-0.6 0.6 -0.25" size="0.6 0.6 0.25" type="box" rgba=".4 .9 .6 1" material="BasketMat" />
+        <geom name="workbench_down_side1" pos="-1.2 0.6 -0.30" size="0.01 0.6 0.3" type="box" rgba=".4 .9 .6 1" material="BasketMat" />
+        <geom name="workbench_down_side2" pos="0 0.6 -0.30" size="0.01 0.6 0.3" type="box" rgba=".4 .9 .6 1" material="BasketMat" />
+        <geom name="workbench_down_side3" pos="-0.6 0 -0.30" size="0.6 0.01 0.3" type="box" rgba=".4 .9 .6 1" material="BasketMat" />
+        <geom name="workbench_down_side4" pos="-0.6 1.2 -0.30" size="0.6 0.01 0.3" type="box" rgba=".4 .9 .6 1" material="BasketMat" />
+        <geom name="floor" pos="0 0 -0.66" size="10 10 1" type="plane" rgba="1 0.83 0.61 1" material="BasketMat" />
+
+
+        
+        <!-- free object -->
+        <!-- <body name = "object1" pos="-0.6 0.6 0.2" >
+            <joint name="joint1_1" pos="0 0 0" axis="1 0 0" type="slide"/>
+            <joint name="joint1_2" pos="0 0 0" axis="0 1 0" type="slide"/>
+            <joint name="joint1_3" pos="0 0 0" axis="0 0 1" type="slide"/>
+            <joint name="joint1_4" pos="0 0 0" axis="1 0 0" type="hinge"/>
+            <joint name="joint1_5" pos="0 0 0" axis="0 1 0" type="hinge"/>
+            <joint name="joint1_6" pos="0 0 0" axis="0 0 1" type="hinge"/>
+            <geom name="chefcan_mesh" type="mesh" mesh="1" material="RobMat" />
+        </body>
+
+        <body name = "object2" pos="-0.6 0.6 0.3" quat="-0.471405 0.471405 0.707107 0.235702">
+            <joint name="joint2_1" pos="0 0 0" axis="1 0 0" type="slide"/>
+            <joint name="joint2_2" pos="0 0 0" axis="0 1 0" type="slide"/>
+            <joint name="joint2_3" pos="0 0 0" axis="0 0 1" type="slide"/>
+            <joint name="joint2_4" pos="0 0 0" axis="1 0 0" type="hinge"/>
+            <joint name="joint2_5" pos="0 0 0" axis="0 1 0" type="hinge"/>
+            <joint name="joint2_6" pos="0 0 0" axis="0 0 1" type="hinge"/>
+            <geom name="crackerbox_mesh" type="mesh" mesh="2" material="RobMat" />
+        </body>
+        
+        <body name = "object3" pos="-0.6 0.6 0.3" quat="-0.471405 0.471405 0.707107 0.235702">
+            <joint name="joint3_1" pos="0 0 0" axis="1 0 0" type="slide"/>
+            <joint name="joint3_2" pos="0 0 0" axis="0 1 0" type="slide"/>
+            <joint name="joint3_3" pos="0 0 0" axis="0 0 1" type="slide"/>
+            <joint name="joint3_4" pos="0 0 0" axis="1 0 0" type="hinge"/>
+            <joint name="joint3_5" pos="0 0 0" axis="0 1 0" type="hinge"/>
+            <joint name="joint3_6" pos="0 0 0" axis="0 0 1" type="hinge"/>
+            <geom name="fishcan_mesh" type="mesh" mesh="3" material="RobMat" />
+        </body> -->
+
+        <body name = "object4" pos="-0.6 0.6 0.3" >
+            <geom class="object3"/>
+        </body>
+
+        <!-- <body name = "object5" pos="-0.6 0.6 0.3" quat="-0.471405 0.471405 0.707107 0.235702">
+            <joint name="joint5_1" pos="0 0 0" axis="1 0 0" type="slide"/>
+            <joint name="joint5_2" pos="0 0 0" axis="0 1 0" type="slide"/>
+            <joint name="joint5_3" pos="0 0 0" axis="0 0 1" type="slide"/>
+            <joint name="joint5_4" pos="0 0 0" axis="1 0 0" type="hinge"/>
+            <joint name="joint5_5" pos="0 0 0" axis="0 1 0" type="hinge"/>
+            <joint name="joint5_6" pos="0 0 0" axis="0 0 1" type="hinge"/>
+            <geom name="puddingbox_mesh" type="mesh" mesh="5" material="RobMat" />
+        </body>
+
+        <body name = "object6" pos="-0.6 0.6 0.3" quat="-0.471405 0.471405 0.707107 0.235702">
+            <joint name="joint6_1" pos="0 0 0" axis="1 0 0" type="slide"/>
+            <joint name="joint6_2" pos="0 0 0" axis="0 1 0" type="slide"/>
+            <joint name="joint6_3" pos="0 0 0" axis="0 0 1" type="slide"/>
+            <joint name="joint6_4" pos="0 0 0" axis="1 0 0" type="hinge"/>
+            <joint name="joint6_5" pos="0 0 0" axis="0 1 0" type="hinge"/>
+            <joint name="joint6_6" pos="0 0 0" axis="0 0 1" type="hinge"/>
+            <geom name="meatcan_mesh" type="mesh" mesh="6" material="RobMat" />
+        </body>
+
+        <body name = "object7" pos="-0.6 0.6 0.3" quat="-0.471405 0.471405 0.707107 0.235702">
+            <joint name="joint7_1" pos="0 0 0" axis="1 0 0" type="slide"/>
+            <joint name="joint7_2" pos="0 0 0" axis="0 1 0" type="slide"/>
+            <joint name="joint7_3" pos="0 0 0" axis="0 0 1" type="slide"/>
+            <joint name="joint7_4" pos="0 0 0" axis="1 0 0" type="hinge"/>
+            <joint name="joint7_5" pos="0 0 0" axis="0 1 0" type="hinge"/>
+            <joint name="joint7_6" pos="0 0 0" axis="0 0 1" type="hinge"/>
+            <geom name="mustardbottle_mesh" type="mesh" mesh="7" material="RobMat" />
+        </body> -->
+        
+    </worldbody>
+
+    <actuator>
+        <!--velocity name="joint1_velocity" joint="joint1"/>
+        <velocity name="joint2_velocity" joint="joint2"/>
+        <velocity name="joint3_velocity" joint="joint3"/>
+        <velocity name="joint4_velocity" joint="joint4"/>
+        <velocity name="joint5_velocity" joint="joint5"/>
+        <velocity name="joint6_velocity" joint="joint6"/-->
+        <!--velocity name="gripper_velocity" joint="gripper_joint_left" gear="0.04" /-->
+
+        <!--position name="joint1_position" joint="joint1"/>
+        <position name="joint2_position" joint="joint2"/>
+        <position name="joint3_position" joint="joint3"/>
+        <position name="joint4_position" joint="joint4"/>
+        <position name="joint5_position" joint="joint5"/>
+        <position name="joint6_position" joint="joint6"/-->
+
+<!--         <motor name="gravity_1" joint="free_z_1" gear="1 0 0 0 0 0" />
+        <motor name="gravity_2" joint="free_z_2" gear="1 0 0 0 0 0" />
+        <motor name="gravity_3" joint="free_z_3" gear="1 0 0 0 0 0" />
+        <motor name="gravity_4" joint="free_z_4" gear="1 0 0 0 0 0" /> -->
+        <!-- <motor name="close_1" joint="joint7_1" gear="0.2 0 0 0 0 0" />
+        <motor name="close_2" joint="joint7_2" gear="0.2 0 0 0 0 0" /> -->
+        
+
+        <!-- <motor name="joint1_motor" joint="joint1" gear="1.2"/>
+        <motor name="joint2_motor" joint="joint2"/>
+        <motor name="joint3_motor" joint="joint3"/>
+        <motor name="joint4_motor" joint="joint4"/>
+        <motor name="joint5_motor" joint="joint5"/>
+        <motor name="joint6_motor" joint="joint6"/> -->
+
+    </actuator>
+
+    <!-- <sensor>
+        <force name="force_sensor" site="force_site" />
+        <torque name="torque_sensor" site="torque_site" />
+    </sensor> -->
+
+</mujoco>
